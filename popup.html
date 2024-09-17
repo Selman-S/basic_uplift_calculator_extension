@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>CR ve Uplift Hesaplama</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+
+  <div class="container-fluid" id="mainContainer">
+    <h1 class="mb-3">CR ve Uplift Hesaplama</h1>
+
+    <table class="table table-bordered table-sm" id="dataTable">
+      <thead class="thead-dark">
+        <tr>
+          <th>Versiyon Adı</th>
+          <th>Session</th>
+          <th>Conversion</th>
+          <th>CR</th>
+          <th>Uplift</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-type="original">
+          <td>Orijinal</td>
+          <td><input type="number" class="form-control form-control-sm visitors" placeholder="Visitors"></td>
+          <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
+          <td class="cr align-middle"></td>
+          <td class="uplift align-middle"></td>
+        </tr>
+        <tr data-type="variation">
+          <td>Varyasyon 1</td>
+          <td><input type="number" class="form-control form-control-sm visitors" placeholder="Session"></td>
+          <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
+          <td class="cr align-middle"></td>
+          <td class="uplift align-middle"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button id="addVariation" class="btn btn-primary btn-sm btn-block">Varyasyon Ekle</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

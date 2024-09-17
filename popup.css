@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  font-size: 12px;
+}
+
+#mainContainer {
+  width: 440px;
+  height: 410px;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.table {
+  margin-bottom: 10px;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 5px;
+}
+
+input.form-control {
+  width: 100%;
+  padding: 2px;
+  font-size: 12px;
+}
+
+#addVariation {
+  font-size: 12px;
+}
+
+.container-fluid {
+  padding: 5px;
+}
+
+.table-sm th, .table-sm td {
+  padding: 0.3rem;
+}
