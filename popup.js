@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   let variationCount = 1;
 
-  /* Mevcut hesaplama fonksiyonları ve event listener'lar */
-
   function calculateCRAndUplift() {
     const rows = document.querySelectorAll('#calculator tbody tr');
     let originalVisitors = null;
@@ -52,24 +50,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (uplift > 0) {
           upliftCell.style.color = 'green';
+
+          // Güvenilirlik hesaplaması
+          const pValue = calculatePValue(
+            originalVisitors,
+            originalConversions,
+            visitors,
+            conversions
+          );
+          const confidence = (1 - pValue) * 100;
+
+          confidenceCell.textContent = confidence.toFixed(2) + '%';
+
+          if (confidence >= 95) {
+            confidenceCell.style.color = 'green';
+          } else {
+            confidenceCell.style.color = 'red';
+          }
         } else {
           upliftCell.style.color = 'red';
-        }
 
-        // Güvenilirlik hesaplaması
-        const pValue = calculatePValue(
-          originalVisitors,
-          originalConversions,
-          visitors,
-          conversions
-        );
-        const confidence = (1 - pValue) * 100;
-
-        confidenceCell.textContent = confidence.toFixed(2) + '%';
-
-        if (confidence >= 95) {
-          confidenceCell.style.color = 'green';
-        } else {
+          // Uplift sıfır veya negatif ise güvenilirlik %0 olarak ayarlanır
+          confidenceCell.textContent = '0%';
           confidenceCell.style.color = 'red';
         }
       } else {
@@ -259,3 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 });
+
+
+
