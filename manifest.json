@@ -3,6 +3,7 @@
   "name": "CR ve Uplift Hesaplama Aracı",
   "description": "Orijinal ve varyasyonlar için CR ve uplift hesaplama aracı.",
   "version": "1.0",
+  "author":"Selman Şahbudak",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
