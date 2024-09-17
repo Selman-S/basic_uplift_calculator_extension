@@ -11,38 +11,101 @@
   <div class="container-fluid" id="mainContainer">
     <h1 class="mb-3">CR ve Uplift Hesaplama</h1>
 
-    <table class="table table-bordered table-sm" id="dataTable">
-      <thead class="thead-dark">
-        <tr>
-          <th>Versiyon Adı</th>
-          <th>Session</th>
-          <th>Conversion</th>
-          <th>CR</th>
-          <th>Uplift</th>
-          <th>Güvenilirlik</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr data-type="original">
-          <td>Orijinal</td>
-          <td><input type="number" class="form-control form-control-sm visitors" placeholder="Visitors"></td>
-          <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
-          <td class="cr align-middle"></td>
-          <td class="uplift align-middle">—</td>
-          <td class="confidence align-middle">—</td>
-        </tr>
-        <tr data-type="variation">
-          <td>Varyasyon 1</td>
-          <td><input type="number" class="form-control form-control-sm visitors" placeholder="Session"></td>
-          <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
-          <td class="cr align-middle"></td>
-          <td class="uplift align-middle"></td>
-          <td class="confidence align-middle"></td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Sekmeler -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="calculator-tab" data-tab="calculator" href="#">Hesaplama Aracı</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="sample-size-tab" data-tab="sample-size" href="#">Örneklem Büyüklüğü</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="test-duration-tab" data-tab="test-duration" href="#">Test Süresi</a>
+      </li>
+    </ul>
 
-    <button id="addVariation" class="btn btn-primary btn-sm btn-block">Varyasyon Ekle</button>
+    <div class="tab-content" id="myTabContent">
+      <!-- İlk Sekme: Mevcut Araç -->
+      <div class="tab-pane active" id="calculator" role="tabpanel" aria-labelledby="calculator-tab">
+        <!-- Mevcut araç içeriği -->
+        <table class="table table-bordered table-sm mt-3" id="dataTable">
+          <thead class="thead-dark">
+            <tr>
+              <th>Versiyon Adı</th>
+              <th>Session</th>
+              <th>Conversion</th>
+              <th>CR</th>
+              <th>Uplift</th>
+              <th>Güvenilirlik</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-type="original">
+              <td>Orijinal</td>
+              <td><input type="number" class="form-control form-control-sm visitors" placeholder="Visitors"></td>
+              <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
+              <td class="cr align-middle"></td>
+              <td class="uplift align-middle">—</td>
+              <td class="confidence align-middle">—</td>
+            </tr>
+            <tr data-type="variation">
+              <td>Varyasyon 1</td>
+              <td><input type="number" class="form-control form-control-sm visitors" placeholder="Session"></td>
+              <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
+              <td class="cr align-middle"></td>
+              <td class="uplift align-middle"></td>
+              <td class="confidence align-middle"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button id="addVariation" class="btn btn-primary btn-sm btn-block">Varyasyon Ekle</button>
+      </div>
+
+      <!-- İkinci Sekme: Örneklem Büyüklüğü Hesaplama -->
+      <div class="tab-pane" id="sample-size" role="tabpanel" aria-labelledby="sample-size-tab">
+        <!-- Örneklem büyüklüğü içeriği -->
+        <div class="mt-3">
+          <h5>Örneklem Büyüklüğü Hesaplama</h5>
+          <div class="form-group">
+            <label for="baselineCR">Mevcut CR (%)</label>
+            <input type="number" class="form-control form-control-sm" id="baselineCR" placeholder="Örn: 5">
+          </div>
+          <div class="form-group">
+            <label for="minimumDetectableEffect">Minimum Algılanabilir Etki (%)</label>
+            <input type="number" class="form-control form-control-sm" id="minimumDetectableEffect" placeholder="Örn: 10">
+          </div>
+          <div class="form-group">
+            <label for="desiredConfidenceLevel">Güvenilirlik Seviyesi (%)</label>
+            <input type="number" class="form-control form-control-sm" id="desiredConfidenceLevel" placeholder="Örn: 95">
+          </div>
+          <div class="form-group">
+            <label for="desiredPower">Güç (%)</label>
+            <input type="number" class="form-control form-control-sm" id="desiredPower" placeholder="Örn: 80">
+          </div>
+          <button id="calculateSampleSize" class="btn btn-primary btn-sm btn-block">Örneklem Büyüklüğünü Hesapla</button>
+          <div id="sampleSizeResult" class="mt-3"></div>
+        </div>
+      </div>
+
+      <!-- Üçüncü Sekme: Test Süresi Tahmini -->
+      <div class="tab-pane" id="test-duration" role="tabpanel" aria-labelledby="test-duration-tab">
+        <!-- Test süresi içeriği -->
+        <div class="mt-3">
+          <h5>Test Süresi Tahmini</h5>
+          <div class="form-group">
+            <label for="dailyVisitors">Günlük Ziyaretçi Sayısı</label>
+            <input type="number" class="form-control form-control-sm" id="dailyVisitors" placeholder="Örn: 1000">
+          </div>
+          <div class="form-group">
+            <label for="neededSampleSize">Gerekli Örneklem Büyüklüğü</label>
+            <input type="number" class="form-control form-control-sm" id="neededSampleSize" placeholder="Örneklem büyüklüğünü girin">
+          </div>
+          <button id="calculateTestDuration" class="btn btn-primary btn-sm btn-block">Test Süresini Hesapla</button>
+          <div id="testDurationResult" class="mt-3"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- Info Icon -->
     <div id="infoIcon">

@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
   let variationCount = 1;
 
+  /* Mevcut hesaplama fonksiyonları ve event listener'lar */
+
   function calculateCRAndUplift() {
-    const rows = document.querySelectorAll('tbody tr');
+    const rows = document.querySelectorAll('#calculator tbody tr');
     let originalVisitors = null;
     let originalConversions = null;
     let originalCR = null;
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function addEventListeners() {
-    const inputs = document.querySelectorAll('.visitors, .conversions');
+    const inputs = document.querySelectorAll('#calculator .visitors, #calculator .conversions');
     inputs.forEach(function(input) {
       input.addEventListener('input', calculateCRAndUplift);
     });
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('addVariation').addEventListener('click', function() {
     variationCount++;
-    const tbody = document.querySelector('#dataTable tbody');
+    const tbody = document.querySelector('#calculator #dataTable tbody');
     const row = document.createElement('tr');
     row.setAttribute('data-type', 'variation');
     row.innerHTML = `
@@ -137,7 +139,123 @@ document.addEventListener('DOMContentLoaded', function() {
     return 0.5 * (1 + sign * erf);
   }
 
- 
-
   addEventListeners();
+
+  /* Örneklem Büyüklüğü Hesaplama */
+
+  document.getElementById('calculateSampleSize').addEventListener('click', function() {
+    const baselineCR = parseFloat(document.getElementById('baselineCR').value) / 100;
+    const mde = parseFloat(document.getElementById('minimumDetectableEffect').value) / 100;
+    const confidenceLevel = parseFloat(document.getElementById('desiredConfidenceLevel').value) / 100;
+    const power = parseFloat(document.getElementById('desiredPower').value) / 100;
+
+    if (isNaN(baselineCR) || isNaN(mde) || isNaN(confidenceLevel) || isNaN(power)) {
+      document.getElementById('sampleSizeResult').textContent = 'Lütfen tüm değerleri girin.';
+      return;
+    }
+
+    const zAlpha = zScore(confidenceLevel);
+    const zBeta = zScore(power);
+
+    const p1 = baselineCR;
+    const p2 = baselineCR * (1 + mde);
+
+    const pooledP = (p1 + p2) / 2;
+    const pooledSE = Math.sqrt(pooledP * (1 - pooledP) * 2);
+
+    const sampleSize = Math.pow((zAlpha + zBeta) * pooledSE / (p2 - p1), 2);
+
+    document.getElementById('sampleSizeResult').textContent = `Gerekli örneklem büyüklüğü (her grup için): ${Math.ceil(sampleSize)}`;
+  });
+
+  function zScore(probability) {
+    // Z skorunu hesaplar
+    return Math.sqrt(2) * inverseErf(2 * probability - 1);
+  }
+
+  function inverseErf(x) {
+    // Inverse hata fonksiyonu
+    const a = 0.147;
+    const ln = Math.log(1 - x * x);
+    const part1 = (2 / (Math.PI * a)) + (ln / 2);
+    const part2 = ln / a;
+    return (x < 0 ? -1 : 1) * Math.sqrt(-part1 + Math.sqrt(part1 * part1 - part2));
+  }
+
+  /* Test Süresi Tahmini */
+
+  document.getElementById('calculateTestDuration').addEventListener('click', function() {
+    const dailyVisitors = parseFloat(document.getElementById('dailyVisitors').value);
+    const neededSampleSize = parseFloat(document.getElementById('neededSampleSize').value);
+
+    if (isNaN(dailyVisitors) || isNaN(neededSampleSize) || dailyVisitors === 0) {
+      document.getElementById('testDurationResult').textContent = 'Lütfen tüm değerleri girin.';
+      return;
+    }
+
+    const daysNeeded = neededSampleSize / (dailyVisitors / 2); // 2 grup olduğu varsayımıyla
+
+    document.getElementById('testDurationResult').textContent = `Tahmini test süresi: ${Math.ceil(daysNeeded)} gün`;
+  });
+
+ /* Sekme Geçişlerini Manuel Olarak Sağlamak */
+  const tabLinks = document.querySelectorAll('.nav-link');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+  const infoText = document.getElementById('infoText');
+
+  const infoContents = {
+    'calculator': `
+      <strong>Bu araç, orijinal ve varyasyonlar için Dönüşüm Oranı (CR), Uplift ve Güvenilirlik oranlarını hesaplamak için kullanılır.</strong><br><br>
+      <u>Dönüşüm Oranı (CR):</u><br>
+      <em>Hesaplama:</em> CR = (Dönüşüm Sayısı / Ziyaretçi Sayısı) × 100<br>
+      Bir sayfayı ziyaret eden kullanıcıların ne kadarının istenen eylemi gerçekleştirdiğini gösterir.<br><br>
+      <u>Uplift:</u><br>
+      <em>Hesaplama:</em> Uplift = ((Varyasyon CR - Orijinal CR) / Orijinal CR) × 100<br>
+      Varyasyonun performansının orijinale göre yüzde olarak ne kadar arttığını veya azaldığını gösterir.<br><br>
+      <u>Güvenilirlik Oranı:</u><br>
+      <em>Hesaplama:</em> İki oran arasındaki farkın istatistiksel anlamlılığını hesaplamak için Z-testi kullanılır.<br>
+      Varyasyonun orijinale göre istatistiksel olarak anlamlı bir fark yaratıp yaratmadığını gösterir. %95 ve üzeri güvenilirlik oranı genellikle sonucun anlamlı olduğunu gösterir.
+    `,
+    'sample-size': `
+      <strong>Örneklem Büyüklüğü Hesaplama Aracı</strong><br><br>
+      Bu araç, A/B testiniz için gerekli olan minimum örneklem büyüklüğünü hesaplamanıza yardımcı olur.<br><br>
+      <u>Kullanım:</u><br>
+      - <strong>Mevcut CR (%):</strong> Şu anki dönüşüm oranınız.<br>
+      - <strong>Minimum Algılanabilir Etki (%):</strong> Tespit etmek istediğiniz en küçük dönüşüm oranı artışı.<br>
+      - <strong>Güvenilirlik Seviyesi (%):</strong> İstediğiniz güven düzeyi (genellikle %95).<br>
+      - <strong>Güç (%):</strong> Testin bir farkı tespit etme olasılığı (genellikle %80).<br><br>
+      Gerekli değerleri girdikten sonra "Örneklem Büyüklüğünü Hesapla" butonuna basın.
+    `,
+    'test-duration': `
+      <strong>Test Süresi Tahmin Aracı</strong><br><br>
+      Bu araç, A/B testinizin tahmini süresini hesaplamanıza yardımcı olur.<br><br>
+      <u>Kullanım:</u><br>
+      - <strong>Günlük Ziyaretçi Sayısı:</strong> Web sitenizin veya test sayfanızın günlük ortalama ziyaretçi sayısı.<br>
+      - <strong>Gerekli Örneklem Büyüklüğü:</strong> Örneklem büyüklüğü hesaplama aracından elde ettiğiniz değer.<br><br>
+      Gerekli değerleri girdikten sonra "Test Süresini Hesapla" butonuna basın.
+    `
+  };
+
+  tabLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      // Aktif sekme ve içerikleri kaldır
+      tabLinks.forEach(function(item) {
+        item.classList.remove('active');
+      });
+      tabPanes.forEach(function(pane) {
+        pane.classList.remove('active');
+      });
+
+      // Seçilen sekme ve içeriği aktif yap
+      const targetTab = link.getAttribute('data-tab');
+      link.classList.add('active');
+      document.getElementById(targetTab).classList.add('active');
+
+      // Info text içeriğini güncelle
+      infoText.innerHTML = infoContents[targetTab];
+    });
+  });
+
 });

@@ -1,3 +1,5 @@
+/* Mevcut CSS kodları */
+
 body {
   margin: 0;
   font-size: 12px;
@@ -5,9 +7,9 @@ body {
 
 #mainContainer {
   width: 440px;
-  height: 410px;
+  height: 500px; /* Yüksekliği artırdık */
   padding: 10px;
-  position: relative; /* Ekledik */
+  position: relative;
 }
 
 h1 {
@@ -46,8 +48,8 @@ input.form-control {
 .confidence {
   font-weight: bold;
 }
-/* Diğer CSS kodları aynı kalabilir */
 
+/* Info Icon ve Tooltip Stil Ayarları */
 #infoIcon {
   position: absolute;
   bottom: 10px;
@@ -91,4 +93,17 @@ input.form-control {
 #infoText em {
   font-size: 12px;
   color: #ddd;
+}
+
+/* Sekmeler için stil ayarları */
+.nav-tabs .nav-link {
+  cursor: pointer;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
 }
