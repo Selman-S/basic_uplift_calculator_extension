@@ -19,6 +19,7 @@
           <th>Conversion</th>
           <th>CR</th>
           <th>Uplift</th>
+          <th>Güvenilirlik</th>
         </tr>
       </thead>
       <tbody>
@@ -27,7 +28,8 @@
           <td><input type="number" class="form-control form-control-sm visitors" placeholder="Visitors"></td>
           <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
           <td class="cr align-middle"></td>
-          <td class="uplift align-middle"></td>
+          <td class="uplift align-middle">—</td>
+          <td class="confidence align-middle">—</td>
         </tr>
         <tr data-type="variation">
           <td>Varyasyon 1</td>
@@ -35,11 +37,30 @@
           <td><input type="number" class="form-control form-control-sm conversions" placeholder="Conversion"></td>
           <td class="cr align-middle"></td>
           <td class="uplift align-middle"></td>
+          <td class="confidence align-middle"></td>
         </tr>
       </tbody>
     </table>
 
     <button id="addVariation" class="btn btn-primary btn-sm btn-block">Varyasyon Ekle</button>
+
+    <!-- Info Icon -->
+    <div id="infoIcon">
+      <img src="./infoicon.png" width="24" height="24" alt="info"/>
+      <div id="infoText">
+        <strong>Bu araç, orijinal ve varyasyonlar için Dönüşüm Oranı (CR), Uplift ve Güvenilirlik oranlarını hesaplamak için kullanılır.</strong><br><br>
+        <u>Dönüşüm Oranı (CR):</u><br>
+        <em>Hesaplama:</em> CR = (Dönüşüm Sayısı / Ziyaretçi Sayısı) × 100<br>
+        Bir sayfayı ziyaret eden kullanıcıların ne kadarının istenen eylemi gerçekleştirdiğini gösterir.<br><br>
+        <u>Uplift:</u><br>
+        <em>Hesaplama:</em> Uplift = ((Varyasyon CR - Orijinal CR) / Orijinal CR) × 100<br>
+        Varyasyonun performansının orijinale göre yüzde olarak ne kadar arttığını veya azaldığını gösterir.<br><br>
+        <u>Güvenilirlik Oranı:</u><br>
+        <em>Hesaplama:</em> İki oran arasındaki farkın istatistiksel anlamlılığını hesaplamak için Z-testi kullanılır.<br>
+        Varyasyonun orijinale göre istatistiksel olarak anlamlı bir fark yaratıp yaratmadığını gösterir. %95 ve üzeri güvenilirlik oranı genellikle sonucun anlamlı olduğunu gösterir.
+      </div>
+    </div>
+
   </div>
 
   <script src="popup.js"></script>

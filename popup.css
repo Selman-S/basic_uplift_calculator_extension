@@ -7,6 +7,7 @@ body {
   width: 440px;
   height: 410px;
   padding: 10px;
+  position: relative; /* Ekledik */
 }
 
 h1 {
@@ -40,4 +41,54 @@ input.form-control {
 
 .table-sm th, .table-sm td {
   padding: 0.3rem;
+}
+
+.confidence {
+  font-weight: bold;
+}
+/* Diğer CSS kodları aynı kalabilir */
+
+#infoIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+#infoIcon img {
+  width: 24px;
+  height: 24px;
+}
+
+#infoText {
+  display: none;
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+  width: 400px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: left;
+  font-size: 12px;
+  z-index: 100;
+}
+
+#infoIcon:hover #infoText {
+  display: block;
+}
+
+/* Tooltip içindeki metin stilleri */
+#infoText strong {
+  font-size: 13px;
+}
+
+#infoText u {
+  font-size: 12px;
+}
+
+#infoText em {
+  font-size: 12px;
+  color: #ddd;
 }
